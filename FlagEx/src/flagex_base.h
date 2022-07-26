@@ -7,15 +7,24 @@ namespace flx
 {
 	struct Func
 	{
+	public:
 		DWORD flag;
-		void* func;
+		virtual void exec() = 0;
 	};
 
-	struct Func
+	struct VFunc : public Func
 	{
-		DWORD flag;
-		bool* func;
-		void* catchFunc;
+	public:
+		void (*func)();
+		void exec();
+	};
+
+	struct BFunc : public Func
+	{
+	public:
+		bool (*func)();
+		void (*catchFunc)();
+		void exec();
 	};
 
 	class FlagChain
@@ -27,11 +36,11 @@ namespace flx
 		FlagChain();
 		FlagChain(DWORD flags);
 
-		void add(DWORD flag, void* func);
-		void add(DWORD flag, bool* func, void* catchFunc);
+		void add(DWORD flag, void (*func)());
+		void add(DWORD flag, bool (*func)(), void (*catchFunc)() = 0);
 
-		void execute(bool deleteAfterExecution = false);
+		void execute(/*bool deleteAfterExecution = false*/);
 
-		void deleteFlagChain();
+		//void deleteFlagChain();
 	};
 }

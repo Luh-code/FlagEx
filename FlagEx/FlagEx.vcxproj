@@ -142,7 +142,9 @@
     <None Include="src\Goal.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\flagex_base.cpp" />
     <ClCompile Include="src\flagex_base.h" />
+    <ClCompile Include="src\flagex_funcs.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
