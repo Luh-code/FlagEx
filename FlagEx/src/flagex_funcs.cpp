@@ -2,15 +2,20 @@
 
 namespace flx
 {
-	void Func::exec() {}
+	void Func::exec() {
+		if (!this->boolean)
+		{
+			func();
+			return;
+		}
+		if (bfunc()) catchFunc();
+	}
 
-	void VFunc::exec()
-	{
+	/*void VFunc::exec() {
 		func();
 	}
 
-	void BFunc::exec()
-	{
+	void BFunc::exec(){
 		if (!func() && catchFunc) catchFunc();
-	}
+	}*/
 }
