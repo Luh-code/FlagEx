@@ -2,6 +2,8 @@
 
 namespace flx
 {
+	void Func::exec() {}
+
 	void VFunc::exec()
 	{
 		func();

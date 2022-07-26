@@ -1,5 +1,6 @@
 #pragma once
 
+#include <windows.h>
 #include <wincon.h>
 #include <vector>
 
@@ -9,7 +10,7 @@ namespace flx
 	{
 	public:
 		DWORD flag;
-		virtual void exec() = 0;
+		virtual void exec();
 	};
 
 	struct VFunc : public Func

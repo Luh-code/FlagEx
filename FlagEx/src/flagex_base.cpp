@@ -14,7 +14,7 @@ namespace flx
 		funcs.push_back(f);
 	}
 
-	void FlagChain::add(DWORD flag, bool (*func)(), void (*catchFunc)() = 0)
+	void FlagChain::add(DWORD flag, bool (*func)(), void (*catchFunc)())
 	{
 		BFunc f;
 		f.flag = flag;
@@ -28,9 +28,9 @@ namespace flx
 	{
 		//funcs.shrink_to_fit();
 
-		for (auto f : funcs)
+		for (uint32_t i = 0; i < funcs.size(); i++)
 		{
-			f.exec();
+			funcs[i].exec();
 		}
 
 		//if (deleteAfterExecution) deleteFlagChain();
