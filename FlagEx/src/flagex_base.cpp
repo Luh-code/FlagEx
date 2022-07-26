@@ -3,16 +3,16 @@
 namespace flx
 {
 	//FlagChain::FlagChain() { flags = 0; }
-	FlagChain::FlagChain(DWORD flags) : flags(flags) {}
+	FlagChain::FlagChain(FLAG flags) : flags(flags) {}
 
-	void FlagChain::add(DWORD flag, void (*func)()){
-		Func f(flag, func, nullptr, nullptr, false);
+	void FlagChain::add(FLAG flag, void (*func)()){
+		FlaggedFunc f(flag, func, nullptr, nullptr, false);
 
 		funcs.push_back(f);
 	}
 
-	void FlagChain::add(DWORD flag, bool (*func)(), void (*catchFunc)()){
-		Func f(flag, nullptr, func, catchFunc, true);
+	void FlagChain::add(FLAG flag, bool (*func)(), void (*catchFunc)()){
+		FlaggedFunc f(flag, nullptr, func, catchFunc, true);
 		
 		funcs.push_back(f);
 	}
@@ -29,7 +29,7 @@ namespace flx
 		//if (deleteAfterExecution) deleteFlagChain();
 	}
 
-	bool FlagChain::isDefined(DWORD flag)
+	bool FlagChain::isDefined(FLAG flag)
 	{
 		return (flags & flag) == flag;
 	}

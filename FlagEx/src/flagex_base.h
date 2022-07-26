@@ -1,37 +1,74 @@
 #pragma once
 
-#include <windows.h>
-#include <wincon.h>
+//#include <windows.h>
+//#include <wincon.h>
 #include <vector>
+//#include <tuple>
+#include <functional>
 
 namespace flx
 {
-	/*interface Func
+	/*interface FlaggedFunc
 	{
 	public:
-		DWORD flag;
+		FLAG flag;
 		void exec();
 	};
 
-	struct VFunc : public Func
+	struct VFunc : public FlaggedFunc
 	{
 	public:
-		VFunc(DWORD flag, void (*func)()) : func(func) { this->flag = flag; }
+		VFunc(FLAG flag, void (*func)()) : func(func) { this->flag = flag; }
 
 		void (*func)();
 		void exec();
 	};*/
 
+	typedef unsigned long FLAG;
+
+	/*template<typename... Args>
 	struct Func
 	{
 	public:
-		Func(DWORD flag, void (*func)(), bool (*bfunc)(),
+		Func(void (*func)(Args...), Args... args)
+		{
+			func = func;
+			arguments = ::std::make_tuple(::std::apply(args));
+		}
+
+		::std::tuple<Args...> arguments;
+
+		void(*func)(Args...);
+	};*/
+
+	template<typename FuncType, typename... Args>
+	struct NestedFunc
+	{
+	public:
+		std::function<FuncType()> m_func;
+
+		NestedFunc(FuncType (*f)(Args...), Args... args) {
+			m_func = [f, args...]()
+			{
+				(f)(args...);
+			};
+		}
+
+		void operator () () {
+			m_func();
+		}
+	};
+
+	struct FlaggedFunc
+	{
+	public:
+		FlaggedFunc(FLAG flag, void (*func)(), bool (*bfunc)(),
 			void (*catchFunc)(), bool boolean)
 			: func(func), bfunc(bfunc), catchFunc(catchFunc), boolean(boolean) {
 			this->flag = flag;
 		}
 
-		DWORD flag;
+		FLAG flag;
 
 		bool boolean;
 		void (*func)();
@@ -43,18 +80,18 @@ namespace flx
 	class FlagChain
 	{
 	public: 
-		DWORD flags;
-		std::vector<Func> funcs;
+		FLAG flags;
+		std::vector<FlaggedFunc> funcs;
 		
 		FlagChain() { flags = 0b0; };
-		FlagChain(DWORD flags);
+		FlagChain(FLAG flags);
 
-		void add(DWORD flag, void (*func)());
-		void add(DWORD flag, bool (*func)(), void (*catchFunc)() = 0);
+		void add(FLAG flag, void (*func)());
+		void add(FLAG flag, bool (*func)(), void (*catchFunc)() = 0);
 
 		void execute(/*bool deleteAfterExecution = false*/);
 
-		bool isDefined(DWORD flag);
+		bool isDefined(FLAG flag);
 
 		//void deleteFlagChain();
 	};

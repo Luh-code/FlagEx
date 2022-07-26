@@ -3,8 +3,8 @@
 
 #include <windows.h>
 
-const DWORD FLAG1 = 0b1 << 0;
-const DWORD FLAG2 = 0b1 << 1;
+const flx::FLAG FLAG1 = 0b1 << 0;
+const flx::FLAG FLAG2 = 0b1 << 1;
 
 void f2()
 {
@@ -15,13 +15,20 @@ int main()
 {
 	std::cout << "Hello World!\n";
 
-	auto f1 = []() -> void { std::cout << "Test1\n";  };
+	auto f1 = []() -> bool { std::cout << "Test1\n"; return false; };
+
+	
 
 	flx::FlagChain chain;
 	chain.flags = FLAG1 | FLAG2;
-	chain.add(FLAG1, f1);
+	chain.add(FLAG1, f1, []() -> void {std::cout << "fuck\n"; });
 	chain.add(FLAG2, f2);
 	chain.execute();
+
+	auto ft1 = [](int a) -> void { std::cout << a * a << std::endl; };
+
+	flx::NestedFunc<void, int> f(ft1, 2);
+	f();
 
 	return 0;
 }
