@@ -1,2 +1,1 @@
-# FlagEx
-A simple Library to aid with flags in your project.
+WHATEVER YOU DO, THIS BRANCH ISNT JUST FUCKED ITS ABSOLUTELY UNUSABLE
