@@ -41,53 +41,56 @@ namespace flx
 		void(*func)(Args...);
 	};*/
 
+	struct BaseFunc {
+		FLAG flag;
+		virtual void exec() {};
+	};
+
 	template<typename FuncType, typename... Args>
 	struct NestedFunc
 	{
 	public:
 		std::function<FuncType()> m_func;
-
 		NestedFunc(FuncType (*f)(Args...), Args... args) {
-			m_func = [f, args...]()
-			{
+			m_func = [f, args...]() {
 				(f)(args...);
 			};
 		}
-
 		void operator () () {
 			m_func();
 		}
 	};
 
-	struct FlaggedFunc
+	template<typename... Args>
+	struct FlaggedFunc : public BaseFunc
 	{
 	public:
-		FlaggedFunc(FLAG flag, void (*func)(), bool (*bfunc)(),
-			void (*catchFunc)(), bool boolean)
-			: func(func), bfunc(bfunc), catchFunc(catchFunc), boolean(boolean) {
-			this->flag = flag;
+		FlaggedFunc(FLAG flag, NestedFunc<Args...> func,
+			NestedFunc<void> catchFunc)
+			: flag(flag), func(func), catchFunc(catchFunc) {
 		}
 
 		FLAG flag;
 
-		bool boolean;
-		void (*func)();
-		bool (*bfunc)();
-		void (*catchFunc)();
-		void exec();
+		NestedFunc<Args...> func;
+		
+		NestedFunc<void> catchFunc;
+		//void exec();
 	};
 
 	class FlagChain
 	{
 	public: 
 		FLAG flags;
-		std::vector<FlaggedFunc> funcs;
+		std::vector<BaseFunc> funcs;
 		
 		FlagChain() { flags = 0b0; };
 		FlagChain(FLAG flags);
 
-		void add(FLAG flag, void (*func)());
-		void add(FLAG flag, bool (*func)(), void (*catchFunc)() = 0);
+		template<typename FuncType, typename... Args>
+		void add(FLAG flag, FuncType(*func)(Args...), Args... args);//, void (*func)(Args...), Args... args);
+		
+		//void add(FLAG flag, bool (*func)(), void (*catchFunc)() = 0);
 
 		void execute(/*bool deleteAfterExecution = false*/);
 
