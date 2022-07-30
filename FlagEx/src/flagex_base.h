@@ -1,101 +1,88 @@
 #pragma once
 
-//#include <windows.h>
-//#include <wincon.h>
 #include <vector>
-//#include <tuple>
 #include <functional>
+#include <cassert>
+
+using FLAG = unsigned long;
 
 namespace flx
 {
-	/*interface FlaggedFunc
+
+	class FlaggedFunc
 	{
 	public:
-		FLAG flag;
-		void exec();
-	};
-
-	struct VFunc : public FlaggedFunc
-	{
-	public:
-		VFunc(FLAG flag, void (*func)()) : func(func) { this->flag = flag; }
-
-		void (*func)();
-		void exec();
-	};*/
-
-	typedef unsigned long FLAG;
-
-	/*template<typename... Args>
-	struct Func
-	{
-	public:
-		Func(void (*func)(Args...), Args... args)
-		{
-			func = func;
-			arguments = ::std::make_tuple(::std::apply(args));
-		}
-
-		::std::tuple<Args...> arguments;
-
-		void(*func)(Args...);
-	};*/
-
-	struct BaseFunc {
-		FLAG flag;
-		virtual void exec() {};
-	};
-
-	template<typename FuncType, typename... Args>
-	struct NestedFunc
-	{
-	public:
-		std::function<FuncType()> m_func;
-		NestedFunc(FuncType (*f)(Args...), Args... args) {
-			m_func = [f, args...]() {
-				(f)(args...);
-			};
-		}
-		void operator () () {
-			m_func();
-		}
-	};
-
-	template<typename... Args>
-	struct FlaggedFunc : public BaseFunc
-	{
-	public:
-		FlaggedFunc(FLAG flag, NestedFunc<Args...> func,
-			NestedFunc<void> catchFunc)
-			: flag(flag), func(func), catchFunc(catchFunc) {
-		}
-
-		FLAG flag;
-
-		NestedFunc<Args...> func;
-		
-		NestedFunc<void> catchFunc;
-		//void exec();
+		FLAG m_flag = 0b0;
+		std::function<bool()> m_func;
+		std::function<void()> m_catchFunc;
 	};
 
 	class FlagChain
 	{
 	public: 
 		FLAG flags;
-		std::vector<BaseFunc> funcs;
+		std::vector<FlaggedFunc*> funcs;
 		
 		FlagChain() { flags = 0b0; };
-		FlagChain(FLAG flags);
+		FlagChain(FLAG flags) : flags(flags) {}
+		
+		template<typename... Args>
+		void add(FLAG flag, bool(__cdecl* func)(Args...), void(__cdecl* catchFunc)(void), Args... args)
+		{
+			std::function<bool()> temp;
+
+			temp = [func, args...]() {
+				return (*func)(args...);
+			};
+
+			std::function<void()> catchTemp;
+
+			catchTemp = [catchFunc, args...]() {
+				(*catchFunc)(args...);
+			};
+
+			FlaggedFunc* ff = new FlaggedFunc();
+			ff->m_flag = flag;
+			ff->m_func = temp;
+			ff->m_catchFunc = catchTemp;
+			funcs.push_back(ff);
+		}
 
 		template<typename FuncType, typename... Args>
-		void add(FLAG flag, FuncType(*func)(Args...), Args... args);//, void (*func)(Args...), Args... args);
-		
-		//void add(FLAG flag, bool (*func)(), void (*catchFunc)() = 0);
+		void add(FLAG flag, FuncType (__cdecl* func)(Args...), Args... args)
+		{
+			std::function<bool()> temp;
 
-		void execute(/*bool deleteAfterExecution = false*/);
+			temp = [func, args...]() {
+				(*func)(args...);
+				return true;
+			};
 
-		bool isDefined(FLAG flag);
+			FlaggedFunc* ff = new FlaggedFunc();
+			ff->m_flag = flag;
+			ff->m_func = temp;
+			funcs.push_back(ff);
+		}
 
-		//void deleteFlagChain();
+		void execute()
+		{
+
+			for (uint32_t i = 0; i < funcs.size(); i++)
+			{
+				if (isDefined(funcs[i]->m_flag)) 
+					if(!funcs[i]->m_func() && funcs[i]->m_catchFunc) 
+						funcs[i]->m_catchFunc();
+			}
+		}
+
+		bool isDefined(FLAG flag)
+		{
+			return (flags & flag) == flag;
+		}
+
+		void deleteFlagChain()
+		{
+			delete[] funcs.data();
+		}
 	};
 }
