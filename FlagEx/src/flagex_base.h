@@ -5,7 +5,7 @@
 #include <cassert>
 #include <iostream>
 
-using FLAG = unsigned long;
+using FLAG = uint64_t;
 
 namespace flx
 {
