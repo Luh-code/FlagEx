@@ -1,6 +1,12 @@
 # FlagEx
 A simple header-only Library to aid with flags in your project.
 
+**DISCLAIMER:** I abandoned this project round about 5 mins ago, when I noticed it is more code-efficient to just define this macro and use it in an if statement:
+```
+#define IS_FLAG_SET(flag, val) ((val & flag) == val)
+```
+So make of that what you will moving forward.
+
 ## How To use
 FlagEx is made with simplicity and ease of use in mind.
 The way flags can be handled with FlagEx is by creating a FlagChain object and adding all of the Functions you may want to execute, aswell as the flag corresponding to that function.
