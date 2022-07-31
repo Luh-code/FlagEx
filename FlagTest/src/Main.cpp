@@ -13,7 +13,7 @@ void f2()
 bool test()
 {
 	std::cout << "TestFunc\n";
-	return true;
+	return false;
 }
 
 int main()
@@ -22,12 +22,12 @@ int main()
 
 	auto f1 = []() -> bool { std::cout << "Test1\n"; return false; };
 	auto ft1 = [](int a) -> bool { std::cout << a * a << std::endl; return false; };
-	auto ft2 = [](int a) -> void { std::cout << a * a << std::endl; };
-
+	void (*ft2)(int) = [](int a) -> void { std::cout << a * a << std::endl; };
+	
 	flx::FlagChain chain;
 	chain.flags = FLAG1 | FLAG2;
+	chain.add<>(FLAG1, test, chain.pause);
 	chain.add<void, int>(FLAG1, (void(__cdecl*)(int))ft2, 2);
-	chain.add<>(FLAG1, test, f2);
 	chain.execute();
 
 	return 0;
