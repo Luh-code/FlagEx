@@ -10,8 +10,8 @@ The further arguments of the template are for the arguments your function takes 
 
 The arguments for the add function Are as follows, first the flag, second the function you want to call if the flag is defined, and all of the rest are the arguments for said function.
 So lets say our function is called testFunc. It's a void and takes an integer as its argument.
-We want it to actuate when 'FLAGX' is set, with a 2 as an argument to testFunc. 
-The way to notation for that would be: ```chain.add<void,int>(FLAGX, testFunc, 2);```
+We want it to actuate when 'FLAGX' is set, with a 2 as an argument for testFunc. 
+The notation for that would be: ```chain.add<void,int>(FLAGX, testFunc, 2);```
 
 It's as easy as that.
 This method works for any return type, though there is another way to do this with a function with a return type of boolean.
