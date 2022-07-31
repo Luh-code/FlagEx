@@ -30,7 +30,6 @@ When the whole FlagChain is set up you can call execute() to run all of the func
 2. Set the flags of the FlagChain
 3. Add functions in company with Flags
 4. Call the execute() function in the FlagChain
-5. Delete the Flagchain
 
 ```
 #include <iostream>
@@ -64,12 +63,12 @@ void funcC()
 
 int main()
 {
-	flx::FlagChain chain; 											// Create a flx::FlagChain object with the name chain
-	chain.flags = FLAGX | FLAGY; 							    // Set the flags Memeber of the FlagChain object
-	chain.add<void, int>(FLAGA, funcA, 2); 			// funcA() is a void with an integer attribute, thus: <void, int>
-	chain.add<>(FLAGB, funcB, chain.pause); 	  // funcB() is a boolean with no attributes. If funcB returns false, the chain.pause() is called
-	chain.add<bool>(FLAGB, funcB2); 	  				 // Here bool needs to be defined in the template, because there isn't a catch function
-	chain.add<void>(FLAGC, funcC)						   // Doesn't get executed because FLAGC isn't defined
-	chain.execute(); 										   		   // Executes the FlagChain
+	flx::FlagChain chain;				// Create a flx::FlagChain object with the name chain
+	chain.flags = FLAGX | FLAGY;			// Set the flags Memeber of the FlagChain object
+	chain.add<void, int>(FLAGA, funcA, 2);		// funcA() is a void with an integer attribute, thus: <void, int>
+	chain.add<>(FLAGB, funcB, chain.pause);		// funcB() is a boolean with no attributes. If funcB returns false, the chain.pause() is called
+	chain.add<bool>(FLAGB, funcB2);			// Here bool needs to be defined in the template, because there isn't a catch function
+	chain.add<void>(FLAGC, funcC);			// Doesn't get executed because FLAGC isn't defined
+	chain.execute();				// Executes the FlagChain
 }
 ```
