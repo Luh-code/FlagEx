@@ -36,8 +36,8 @@ When the whole FlagChain is set up you can call execute() to run all of the func
 #include "flagex_base.h"
 
 FLAG FLAGA = 0b0 << 0;
-FLAG FLAGA = 0b0 << 1;
-FLAG FLAGA = 0b0 << 2;
+FLAG FLAGB = 0b0 << 1;
+FLAG FLAGC = 0b0 << 2;
 
 void funcA(int a)
 {
