@@ -2,8 +2,9 @@
 A simple header-only Library to aid with flags in your project.
 
 **DISCLAIMER:** I abandoned this project round about 5 mins ago, when I noticed it is more code-efficient, easy to use and easy to read to just define this macro and use it in an if statement:
-```
+```c++
 #define IS_FLAG_SET(flag, val) ((val & flag) == val)
+#define IF_FLAG_SET(flags, flag, func, ...) if (IS_FLAG_SET(flags, flag) && !((bool)func(__VA_ARGS__)))
 ```
 So make of that what you will moving forward.
 
@@ -37,7 +38,7 @@ When the whole FlagChain is set up you can call execute() to run all of the func
 3. Add functions in company with Flags
 4. Call the execute() function in the FlagChain
 
-```
+```c++
 #include <iostream>
 #include "flagex_base.h"
 
