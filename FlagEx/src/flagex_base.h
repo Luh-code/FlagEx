@@ -73,7 +73,7 @@ namespace flx
 		}
 
 		template<typename... Args>
-		void add(FLAG flag, bool(__cdecl* func)(Args...), void(__cdecl* catchFunc)(FlagChain*) = 0, Args... args)
+		void addCatch(FLAG flag, bool(__cdecl* func)(Args...), void(__cdecl* catchFunc)(FlagChain*) = 0, Args... args)
 		{
 			std::function<bool()> temp;
 

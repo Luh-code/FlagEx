@@ -21,11 +21,5 @@
     <ClCompile Include="src\flagex_base.h">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="src\flagex_base.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="src\flagex_funcs.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ void f2()
 	std::cout << "cought\n";
 }
 
-bool test()
+bool test(uint32_t i, const char**)
 {
 	std::cout << "TestFunc\n";
 	return false;
@@ -26,7 +26,8 @@ int main()
 	
 	flx::FlagChain chain;
 	chain.flags = FLAG1 | FLAG2;
-	chain.add<>(FLAG1, test, chain.pause);
+	const char* ttt[]{ "fsdf" };
+	chain.addCatch<uint32_t, const char**>(FLAG1, (bool(__cdecl*)(uint32_t, const char**))test, chain.pause, 2, ttt, 23);
 	chain.add<void, int>(FLAG1, (void(__cdecl*)(int))ft2, 2);
 	chain.execute();
 
