@@ -4,7 +4,7 @@ A simple header-only Library to aid with flags in your project.
 **DISCLAIMER:** I abandoned this project, when I noticed it is more code-efficient, easy to use and easy to read to just define these macros:
 ```c++
 #define IS_FLAG_SET(flag, val) ((val & flag) == val)
-#define IF_FLAG_SET(flags, flag, func, ...) if (IS_FLAG_SET(flags, flag) && !((bool)func(__VA_ARGS__)))
+#define IF_FLAG_SET(flags, flag, func, ...) if (IS_FLAG_SET(flags, flag) && !static_cast<bool>(func(__VA_ARGS__)))
 ```
 So make of that what you will moving forward.
 
