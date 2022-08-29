@@ -1,7 +1,7 @@
 # FlagEx
 A simple header-only Library to aid with flags in your project.
 
-**DISCLAIMER:** I abandoned this project, when I noticed it is more code-efficient, easy to use and easy to read to just define these macros:
+**DISCLAIMER:** I abandoned this project, when I noticed it is more code-efficient, easy to use and easy to read for functions with many arguments to just define these macros (they are also defined in FlagEx-base.h):
 ```c++
 #define IS_FLAG_SET(flag, val) ((val & flag) == val)
 #define IF_FLAG_SET(flags, flag, func, ...) if (IS_FLAG_SET(flags, flag) && !static_cast<bool>(func(__VA_ARGS__)))
